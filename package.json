@@ -29,9 +29,6 @@
     "eslint-plugin-standard": "^4.0.1"
   },
   "dependencies": {},
-  "directories": {
-    "lib": "lib"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/DScheglov/assets-dynamic-import.git"
