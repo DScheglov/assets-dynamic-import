@@ -94,7 +94,7 @@ function importScript<T = void>(src: string, nodeProps?: HTMLScriptElement, reso
 |  Argument |   Type   | Mandatory | Description             |
 |:---------:|:--------:|:---------:|:------------------------|
 | **src**  | `string` |  **yes**  | url to load javascript from |
-| **nodeProps** | `HTMLLinkElement` | _no_ | object with attributes of `<link>` element |
+| **nodeProps** | `HTMLScriptElement` | _no_ | object with attributes of `<link>` element |
 | **resolveCallback** | <T>() => T | _no_ | callback to resolve some js interface after script is loaded |
 
 **Return value**:
