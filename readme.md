@@ -22,13 +22,60 @@ const processSomeData = async data => {
 }
 ```
 
-See **Login Form** sample with `jQuery` in live [Sandbox](https://codesandbox.io/s/assets-dynamic-import-li87q?file=/index.js)
+```js
+import { importScript, importStyle } from "assets-dynamic-import";
+
+const loadAssets = () =>
+  Promise.all([
+    importScript(
+      "https://code.jquery.com/jquery-3.5.1.slim.min.js",
+      {
+        integrity: "sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=",
+        crossOrigin: "anonymous"
+      },
+      () => global.jQuery
+    ),
+    importStyle(
+      "https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    ),
+    importStyle("https://getbootstrap.com/docs/4.4/examples/sign-in/signin.css")
+  ]).then(([$]) => $);
+
+const renderLoginForm = $ => {
+  $("body").addClass("text-center");
+  $("body").html(`
+    <form class="form-signin">
+      <img class="mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+      <label for="inputEmail" class="sr-only">Email address</label>
+      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+      <p class="mt-5 mb-3 text-muted">© 2017-2019</p>
+    </form>
+  `);
+};
+
+const btnLoad = document.getElementById("btn-load");
+
+btnLoad.onclick = async () => {
+  btnLoad.innerHTML = "Loading ...";
+  const $ = await loadAssets();
+  renderLoginForm($);
+};
+```
 
 
 ## Specification
 
 ----
-### `importScript(src, [nodeProps, [resolveCallback]]): Promise`
+### `importScript(src[, nodeProps][, resolveCallback]): Promise`
 
 Creates `<script>` node assigns it with `src`, `type` and attributes from `nodeProps` and then appends it to the document `<body>`.
 
@@ -38,6 +85,7 @@ Function returns promise.
 
 
 ```ts
+function importScript<T = void>(src: string, resolveCallback?: () => T): Promise<T>;
 function importScript<T = void>(src: string, nodeProps?: HTMLScriptElement, resolveCallback?: () => T): Promise<T>;
 ```
 
@@ -54,7 +102,7 @@ function importScript<T = void>(src: string, nodeProps?: HTMLScriptElement, reso
 
 ----
 
-### `importStyle(href, [nodeProps, [resolveCallback]]): Promise`
+### `importStyle(href[, nodeProps][, resolveCallback]): Promise`
 
 Creates `<link>` node assigns it with `href`, `rel` and attributes from `nodeProps` and then appends it to the document `<head>`.
 
@@ -63,6 +111,7 @@ Function returns promise.
 `importStyle` could be safely called several times with the same set of `href` and `nodeProps`. It effects only on DOMNode to be added, so only one time stylesheet will be loaded.
 
 ```ts
+function importStyle<T = void>(href: string, resolveCallback?: () => T): Promise<T>;
 function importStyle<T = void>(href: string, nodeProps?: HTMLLinkElement, resolveCallback?: () => T): Promise<T>;
 ```
 
