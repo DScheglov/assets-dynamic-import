@@ -1,16 +1,16 @@
-# dynamic-assets-import
+# assets-dynamic-import
 Simple way to dynamicly import some external assets in the runtime.
 
 ## Installation
 
 ```shell
-npm install --save dynamic-assets-import
+npm install --save assets-dynamic-import
 ```
 
 ## Usage
 
 ```js
-import { importScript } from 'dynamic-assets-import';
+import { importScript } from 'assets-dynamic-import';
 
 const processSomeData = async data => {
   const { someFnFromMyLib } = await importScript(
@@ -22,7 +22,7 @@ const processSomeData = async data => {
 }
 ```
 
-See **Login Form** sample with `jQuery` in live [Sandbox](https://codesandbox.io/s/dynamic-assets-import-li87q?file=/index.js)
+See **Login Form** sample with `jQuery` in live [Sandbox](https://codesandbox.io/s/assets-dynamic-import-li87q?file=/index.js)
 
 
 ## Specification
