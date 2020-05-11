@@ -1,6 +1,7 @@
 node_modules
 public
-lib
 .idea
+.vscode
+.npmrc
 .vscode
 .npmrc
