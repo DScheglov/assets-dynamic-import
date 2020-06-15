@@ -1,17 +1,11 @@
+import { handleWith } from './utils';
+
 const resetLoadHandlers = (node, onload, onerror) => () => {
   node.onload = onload;
   node.onerror = onerror;
 };
 
-const handleWith = (...handlers) => {
-  const fnHandlers = handlers.filter(handler => typeof handler === 'function');
-
-  return function polyHandler (...args) {
-    fnHandlers.forEach(handler => handler.apply(this, ...args));
-  };
-};
-
-const appendNodeAsync = (target, node, resolveCallback) => new Promise(
+export const appendNodeAsync = (target, node, resolveCallback) => new Promise(
   (resolve, reject) => {
     const resetHandlers = resetLoadHandlers(node, node.onload, node.onerror);
 
@@ -26,6 +20,7 @@ const appendNodeAsync = (target, node, resolveCallback) => new Promise(
     node.onerror = handleWith(
       resetHandlers,
       node.onerror,
+      target.removeChild.bind(target, node),
       () => reject(new Error(
         `Couldn't load ${node.rel || node.tagName} by url: ${node.href || node.src}`
       ))
@@ -34,4 +29,7 @@ const appendNodeAsync = (target, node, resolveCallback) => new Promise(
     target.appendChild(node);
   });
 
-export default appendNodeAsync;
+export const createElement = (tagName, nodeProps) => Object.assign(
+  global.document.createElement(tagName),
+  nodeProps
+);

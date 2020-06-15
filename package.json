@@ -1,11 +1,11 @@
 {
   "name": "assets-dynamic-import",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "Static Assests loader",
   "main": "lib/index.js",
   "scripts": {
-    "test": "exit 0",
-    "build": "babel ./src -d ./lib && cp ./src/*.d.ts ./lib",
+    "test": "jest --coverage && ./.coveralls.sh",
+    "build": "babel ./src -d ./lib --ignore **/__test__ && cp ./src/*.d.ts ./lib",
     "prepublish": "npm run build"
   },
   "keywords": [
@@ -20,13 +20,15 @@
     "@babel/core": "^7.9.6",
     "@babel/plugin-transform-runtime": "^7.9.6",
     "@babel/preset-env": "^7.9.6",
+    "coveralls": "^3.1.0",
     "eslint": "^7.0.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-plugin-import": "^2.20.2",
     "eslint-plugin-jest": "^23.10.0",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "eslint-plugin-standard": "^4.0.1",
+    "jest": "^26.0.1"
   },
   "dependencies": {},
   "repository": {
