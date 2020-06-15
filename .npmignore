@@ -1,6 +1,5 @@
-node_modules
 .idea
-.vscode
 .npmrc
 .vscode
-.npmrc
+coverage
+node_modules
