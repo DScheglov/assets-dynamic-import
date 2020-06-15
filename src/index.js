@@ -1,36 +1,30 @@
-import appendNodeAsync from './appendNodeAsync';
-import cacheAll from './cacheAll';
+import { appendNodeAsync, createElement } from './dom-ops';
+import { cacheAll, onlyIfNotFn, onlyIfFn } from './utils';
 
-const createElement = (tagName, nodeProps) => Object.assign(
-  global.document.createElement(tagName),
-  nodeProps
-);
+export const appendStyle = (href, nodeProps, resolveCallback = onlyIfFn(nodeProps)) =>
+  appendNodeAsync(
+    global.document.head,
+    createElement('link', {
+      rel: 'stylesheet', href, ...onlyIfNotFn(nodeProps)
+    }),
+    resolveCallback
+  );
 
-const onlyIfFn = (value, def) => typeof value === 'function' ? value : def;
-const onlyIfNotFn = (value, def) => typeof value !== 'function' ? value : def;
+export const appendScript = (src, nodeProps, resolveCallback = onlyIfFn(nodeProps)) =>
+  appendNodeAsync(
+    global.document.body,
+    createElement('script', {
+      type: 'text/javascript', async: true, src, ...onlyIfNotFn(nodeProps)
+    }),
+    resolveCallback
+  );
 
-const appendStyle = (href, nodeProps, resolveCallback = onlyIfFn(nodeProps)) => appendNodeAsync(
-  global.document.head,
-  createElement('link', {
-    rel: 'stylesheet',
-    href,
-    ...onlyIfNotFn(nodeProps)
-  }),
-  resolveCallback
-);
+export const importScript = cacheAll(appendScript);
 
-const appendScript = (src, nodeProps, resolveCallback = onlyIfFn(nodeProps)) => appendNodeAsync(
-  global.document.body,
-  createElement('script', {
-    type: 'text/javascript',
-    async: true,
-    src,
-    ...onlyIfNotFn(nodeProps)
-  }),
-  resolveCallback
-);
+export const importStyle = cacheAll(appendStyle);
 
-const buildCacheKey = (url, props = null) => `${url}${JSON.stringify(onlyIfNotFn(props, ''))}`;
-
-export const importScript = cacheAll(appendScript, buildCacheKey);
-export const importStyle = cacheAll(appendStyle, buildCacheKey);
+export {
+  appendNodeAsync,
+  cacheAll,
+  createElement
+};
