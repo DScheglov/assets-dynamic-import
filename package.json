@@ -4,7 +4,7 @@
   "description": "Static Assests loader",
   "main": "lib/index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --coverage && ./.coveralls.sh",
     "build": "babel ./src -d ./lib --ignore **/__test__ && cp ./src/*.d.ts ./lib",
     "prepublish": "npm run build"
   },
