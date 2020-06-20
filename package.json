@@ -1,6 +1,6 @@
 {
   "name": "assets-dynamic-import",
-  "version": "1.0.5",
+  "version": "2.0.0",
   "description": "Static Assests loader",
   "main": "lib/index.js",
   "scripts": {
