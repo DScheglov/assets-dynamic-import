@@ -22,56 +22,30 @@ const processSomeData = async data => {
 }
 ```
 
-```js
+```ts
 import { importScript, importStyle } from 'assets-dynamic-import';
 
-const loadAssets = () =>
-  Promise.all([
-    importScript(
-      'https://code.jquery.com/jquery-3.5.1.slim.min.js',
-      {
-        integrity: 'sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=',
-        crossOrigin: 'anonymous'
-      },
-      () => global.jQuery
-    ),
-    importStyle(
-      'https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css'
-    ),
-    importStyle('https://getbootstrap.com/docs/4.4/examples/sign-in/signin.css')
-  ]).then(([$]) => $);
+export interface Recurly {
+  token(form: HTMLFormElement, cb: (err: Error | null, token: string) => void): void;
+}
 
-const renderLoginForm = $ => {
-  $("body").addClass("text-center");
-  $("body").html(`
-    <form class="form-signin">
-      <img class="mb-4" src="https://getbootstrap.com/docs/4.4/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" class="form-control" placeholder="Email address" required="" autofocus="">
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" class="form-control" placeholder="Password" required="">
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" value="remember-me"> Remember me
-        </label>
-      </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-      <p class="mt-5 mb-3 text-muted">© 2017-2019</p>
-    </form>
-  `);
-};
-
-const btnLoad = document.getElementById('btn-load');
-
-btnLoad.onclick = async () => {
-  btnLoad.innerHTML = 'Loading ...';
-  const $ = await loadAssets();
-  renderLoginForm($);
-};
+export default () => Promise.all([
+    () => importScript('https://js.recurly.com/v4/recurly.js'),
+    () => importStyle('https://js.recurly.com/v4/recurly.css'),
+])
+  .then(() => {
+    const recurly = (window as any).recurly as Recurly;
+    return {
+      token: (form: HTMLFormElement): Promise<string> => new Promise(
+        (resolve, reject) => recurly.token(form, (err: Error | null, token: string) => (
+          err == null ? resolve(token) : reject(err)
+        )
+      )),
+    };
+  });
 ```
 
-## Specification
+## Motivation
 
 The main idea of the library to provide users with minimal tool set that allows to
 work with external (to application bundle) assets.
@@ -119,6 +93,10 @@ The library is developed considering following use cases:
   export default App;
   ```
 
+## Specification
+
+The library exports the following functions:
+
 | Function       | Target | Child    | Cache | Description                                               |
 |:--------------:|:------:|:--------:|:-----:|:----------------------------------------------------------|
 | [importScript](#importscriptsrc-nodeprops-resolvecallback-promise) | `body` | `script` | yes | Imports javascript-assets and caches such imports |
@@ -127,7 +105,7 @@ The library is developed considering following use cases:
 | [appendStyle](#appendstylehref-nodeprops-resolvecallback-promise)  | `head` | `link` | no | Creates a link-node and appends it to the document head that initiats resource loading |
 | [createElement](#createelementtag-nodeprops-htmlelement) | n/a | n/a | no | Creates DOMNode and assigns its properties |
 | [appendNodeAsync](appendnodetarget-node-resolvecallback-promise) | any | any | no | Assigns `onload` and `onerror` event lesteners of the `Child` and appends it to the `Target` |
-| `cacheAll` | n/a | n/a | n/a | Memoization function decorator |
+| [cacheAll](#cacheallfn--getkey-function) | n/a | n/a | n/a | Memoization function decorator |
 
 ----
 ### `importScript(src[, nodeProps][, resolveCallback]): Promise`
@@ -151,7 +129,7 @@ Each further call of `importScript` results with the same promise as the first c
 **Return value**:
 - `Promise<T>` - that resolves with result of `resolveCallback` (if specified otherwise with `undefined`) or rejects with `Error` and message: 'Couldn't load script by <url>'.
 
-**Example**:
+**Example 1. "Recurly"**:
 
 **./recurly.ts**
 
@@ -190,6 +168,21 @@ const getToken = (form: HTMLFormElement) => importRecurly()
 ;
 
 ```
+
+**Example 2."Integrity and Credential policy"**
+
+```js
+    importScript(
+      'https://some-domain.come/some-script.js',
+      {
+        integrity: 'sha256-4+XzXVhsDmqanXGHaHvgh1gMQKX40OUvDEBTu8JcmNs=',
+        crossOrigin: 'anonymous'
+      },
+      () => global.jQuery
+    ),
+```
+
+----
 
 ### `appendScript(src[, nodeProps][, resolveCallback]): Promise`
 
@@ -269,6 +262,12 @@ Each further call of `importStyle` results with the same promise as the first ca
 **Return value**:
 - `Promise<T>` - that resolves with result of `resolveCallback` (if specified otherwise with `undefined`) or rejects with `Error` and message: 'Couldn't load stylesheet by <url>'
 
+**How to import**:
+
+```js
+import { importStyle } from 'assets-dynamic-import`;
+```
+
 
 ----
 ### `appendStyle(href[, nodeProps][, resolveCallback]): Promise`
@@ -294,6 +293,12 @@ Actaully `importStyle` is a momoized version of `appenStyle` that caches its cal
 **Return value**:
 - `Promise<T>` - that resolves with result of `resolveCallback` (if specified otherwise with `undefined`) or rejects with `Error` and message: 'Couldn't load stylesheet by <url>'
 
+**How to import**:
+
+```js
+import { appendStyle } from 'assets-dynamic-import`;
+```
+
 ----
 ### `createElement(tag, nodeProps): HTMLElement`
 
@@ -309,6 +314,12 @@ Creates a DOM node with `tag` and assigns its props, specified as `nodeProps`:
 **Returns**
 
 - `HTNLElement[tag]` - created DOM node.
+
+**How to import**:
+
+```js
+import { createElement } from 'assets-dynamic-import`;
+```
 
 ----
 ### `appendNode(target, node[, resolveCallback]): Promise`
@@ -328,6 +339,11 @@ after the content will be loaded.
 **Returns**
 - `Promise<T>` - that resolves with result of `resolveCallback` (if specified otherwise with `undefined`) or rejects with `Error`.
 
+**How to import**:
+
+```js
+import { appendNodeAsync } from 'assets-dynamic-import`;
+```
 
 ---
 ### `cacheAll(fn [, getKey]): Function`
@@ -339,4 +355,10 @@ export function cacheAll<A extends any[], R, K>(
 	fn: Fn<A, R>, 
 	getCacheKey?: Fn<A, K>
 ): Fn<A, R> & { force: Fn<A, R>}
+```
+
+**How to import**:
+
+```js
+import { cacheAll } from 'assets-dynamic-import`;
 ```
