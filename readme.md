@@ -1,4 +1,6 @@
-# assets-dynamic-import &middot; [![Build Status](https://travis-ci.org/DScheglov/assets-dynamic-import.svg?branch=master)](https://travis-ci.org/DScheglov/assets-dynamic-import) [![Coverage Status](https://coveralls.io/repos/github/DScheglov/assets-dynamic-import/badge.svg?branch=master)](https://coveralls.io/github/DScheglov/assets-dynamic-import?branch=master) [![npm version](https://img.shields.io/npm/v/assets-dynamic-import.svg?style=flat-square)](https://www.npmjs.com/package/assets-dynamic-import) [![npm downloads](https://img.shields.io/npm/dm/assets-dynamic-import.svg?style=flat-square)](https://www.npmjs.com/package/assets-dynamic-import) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/assets-dynamic-import/blob/master/LICENSE)
+# assets-dynamic-import
+[![Build Status](https://travis-ci.org/DScheglov/assets-dynamic-import.svg?branch=master)](https://travis-ci.org/DScheglov/assets-dynamic-import) [![Coverage Status](https://coveralls.io/repos/github/DScheglov/assets-dynamic-import/badge.svg?branch=master)](https://coveralls.io/github/DScheglov/assets-dynamic-import?branch=master) [![npm version](https://img.shields.io/npm/v/assets-dynamic-import.svg?style=flat-square)](https://www.npmjs.com/package/assets-dynamic-import) [![npm downloads](https://img.shields.io/npm/dm/assets-dynamic-import.svg?style=flat-square)](https://www.npmjs.com/package/assets-dynamic-import) [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/DScheglov/assets-dynamic-import/blob/master/LICENSE)
+
 Simple way to dynamicly import some external assets in the runtime.
 
 ## Installation
@@ -265,7 +267,7 @@ Each further call of `importStyle` results with the same promise as the first ca
 **How to import**:
 
 ```js
-import { importStyle } from 'assets-dynamic-import`;
+import { importStyle } from 'assets-dynamic-import';
 ```
 
 
@@ -296,7 +298,7 @@ Actaully `importStyle` is a momoized version of `appenStyle` that caches its cal
 **How to import**:
 
 ```js
-import { appendStyle } from 'assets-dynamic-import`;
+import { appendStyle } from 'assets-dynamic-import';
 ```
 
 ----
@@ -318,7 +320,7 @@ Creates a DOM node with `tag` and assigns its props, specified as `nodeProps`:
 **How to import**:
 
 ```js
-import { createElement } from 'assets-dynamic-import`;
+import { createElement } from 'assets-dynamic-import';
 ```
 
 ----
@@ -342,7 +344,7 @@ after the content will be loaded.
 **How to import**:
 
 ```js
-import { appendNodeAsync } from 'assets-dynamic-import`;
+import { appendNodeAsync } from 'assets-dynamic-import';
 ```
 
 ---
@@ -360,5 +362,5 @@ export function cacheAll<A extends any[], R, K>(
 **How to import**:
 
 ```js
-import { cacheAll } from 'assets-dynamic-import`;
+import { cacheAll } from 'assets-dynamic-import';
 ```
