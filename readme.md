@@ -119,16 +119,14 @@ The library is developed considering following use cases:
   export default App;
   ```
 
-The
-
 | Function       | Target | Child    | Cache | Description                                               |
 |:--------------:|:------:|:--------:|:-----:|:----------------------------------------------------------|
 | [importScript](#importscriptsrc-nodeprops-resolvecallback-promise) | `body` | `script` | yes | Imports javascript-assets and caches such imports |
 | [appendScript](#appendscriptsrc-nodeprops-resolvecallback-promise) | `body` | `script` | no | Creates a script-node and appends it to the document body that initiats resourse loading |
 | [importStyle](#importstylehref-nodeprops-resolvecallback-promise) | `head` | `link` | yes | Imports CSS-assets and caches such imports |
-| [appendStyle]((#appendstylehref-nodeprops-resolvecallback-promise))  | `head` | `link` | no | Creates a link-node and appends it to the document head that initiats resource loading |
-| `createElement` | n/a | n/a | no | Creates DOMNode and assigns its properties |
-| `appendNodeAsync` | any | any | no | Assigns `onload` and `onerror` event lesteners of the `Child` and appends it to the `Target` |
+| [appendStyle](#appendstylehref-nodeprops-resolvecallback-promise)  | `head` | `link` | no | Creates a link-node and appends it to the document head that initiats resource loading |
+| [createElement](#createelementtag-nodeprops-htmlelement) | n/a | n/a | no | Creates DOMNode and assigns its properties |
+| [appendNodeAsync](appendnodetarget-node-resolvecallback-promise) | any | any | no | Assigns `onload` and `onerror` event lesteners of the `Child` and appends it to the `Target` |
 | `cacheAll` | n/a | n/a | n/a | Memoization function decorator |
 
 ----
@@ -329,3 +327,16 @@ after the content will be loaded.
 
 **Returns**
 - `Promise<T>` - that resolves with result of `resolveCallback` (if specified otherwise with `undefined`) or rejects with `Error`.
+
+
+---
+### `cacheAll(fn [, getKey]): Function`
+
+```ts
+type Fn<A extends any[], R> = (...args: A) => R;
+
+export function cacheAll<A extends any[], R, K>(
+	fn: Fn<A, R>, 
+	getCacheKey?: Fn<A, K>
+): Fn<A, R> & { force: Fn<A, R>}
+```
