@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest --coverage && ./.coveralls.sh",
     "build": "babel ./src -d ./lib --ignore **/__test__ && cp ./src/*.d.ts ./lib",
-    "prepublish": "npm run build"
+    "prepublish": "rm -rf ./lib && npm run build"
   },
   "keywords": [
     "dynamic",
