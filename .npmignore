@@ -1,10 +1,4 @@
-.idea
-.npmrc
-.vscode
-coverage
-node_modules
-__test__
-jest.config.js
-coveralls.sh
-travis.yml
-jsdomenv.js
+ /*
+!/lib
+!/src
+/src/__test__
