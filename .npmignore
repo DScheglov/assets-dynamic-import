@@ -3,3 +3,8 @@
 .vscode
 coverage
 node_modules
+__test__
+jest.config.js
+coveralls.sh
+travis.yml
+jsdomenv.js
